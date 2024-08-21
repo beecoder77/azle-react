@@ -1,5 +1,6 @@
 import express from 'express';
 import { Server, ic, query } from 'azle';
+import axios from 'axios';
 import {
     HttpResponse,
     HttpTransformArgs,
@@ -32,6 +33,27 @@ export default Server(
 
         app.get('/greet', (req, res) => {
             res.json({ greeting: `Hello, ${req.query.name}` });
+        });
+
+        app.get('/news', async (req, res) => {
+            const responseAsal = {
+                status: 'ok',
+                articles: [
+                    {
+                        source: { id: '1', name: 'CNN' },
+                    },
+                    {
+                        source: { id: '2', name: 'BBC' },
+                    },
+                ],
+            };
+            try {
+                const response = await (await fetch(`https://newsapi.org/v2/everything?q=tesla&from=2024-07-21&sortBy=publishedAt&apiKey=ffaacde90f4943a1ad401a0e4c694f25`)).json();
+                res.json(response);
+            } catch (error) {
+                console.log(error)
+                res.json(responseAsal);
+            }
         });
 
         app.post('/price-oracle', async (req, res) => {

@@ -15,5 +15,9 @@
     "workspaces": [
         "src/backend",
         "src/frontend"
-    ]
+    ],
+    "dependencies": {
+        "axios": "^1.7.4",
+        "node-fetch": "^3.3.2"
+    }
 }
