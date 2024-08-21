@@ -35,7 +35,7 @@ export default Server(
             res.json({ greeting: `Hello, ${req.query.name}` });
         });
 
-        app.get('/news', async (req, res) => {
+        app.post('/submissionone', async (req, res) => {
             const responseAsal = {
                 status: 'ok',
                 articles: [
@@ -47,8 +47,14 @@ export default Server(
                     },
                 ],
             };
+            // const query = req.query ? req.query : 'tesla';
             try {
-                const response = await (await fetch(`https://newsapi.org/v2/everything?q=tesla&from=2024-07-21&sortBy=publishedAt&apiKey=ffaacde90f4943a1ad401a0e4c694f25`)).json();
+                ic.setOutgoingHttpOptions({
+                    maxResponseBytes: 20_000n,
+                    cycles: 500_000_000_000n, // HTTP outcalls cost cycles. Unused cycles are returned.
+                    transformMethodName: 'transform'
+                });
+                const response = await (await fetch(`https://newsapi.org/v2/everything?q=icp&from=2024-07-21&sortBy=publishedAt&apiKey=ffaacde90f4943a1ad401a0e4c694f25&pageSize=5`)).json();
                 res.json(response);
             } catch (error) {
                 console.log(error)
